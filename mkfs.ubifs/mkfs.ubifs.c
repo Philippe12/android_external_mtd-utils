@@ -405,7 +405,7 @@ static int validate_options(void)
 		return err_msg("LEB should be multiple of min. I/O units");
 	if (c->leb_size % 8)
 		return err_msg("LEB size has to be multiple of 8");
-	if (c->leb_size > 1024*1024)
+	if (c->leb_size > 2*1024*1024)
 		return err_msg("too large LEB size %d", c->leb_size);
 	if (c->max_leb_cnt < UBIFS_MIN_LEB_CNT)
 		return err_msg("too low max. count of LEBs, minimum is %d",
@@ -708,7 +708,7 @@ static int get_options(int argc, char**argv)
 			   (!strcmp(root + root_len - 7, "system/"))) {
 			source_path_len = root_len - 7;
 		} else if ((root_len >= 7) &&
-			   (!strcmp(root + root_len - 7, "rootfs/"))) {
+			   (!strcmp(root + root_len - 5, "root/"))) {
 			source_path_len = root_len;
 		} else {
 			return err_msg("Fixstats (-F) option requested but "
@@ -2236,6 +2236,8 @@ static int write_super(void)
 	}
 	if (c->big_lpt)
 		sup.flags |= cpu_to_le32(UBIFS_FLG_BIGLPT);
+		
+	sup.flags |= cpu_to_le32(UBIFS_FLG_SPACE_FIXUP);
 
 	return write_node(&sup, UBIFS_SB_NODE_SZ, UBIFS_SB_LNUM, UBI_LONGTERM);
 }

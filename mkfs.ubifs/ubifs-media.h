@@ -376,6 +376,7 @@ enum {
  */
 enum {
 	UBIFS_FLG_BIGLPT = 0x02,
+	UBIFS_FLG_SPACE_FIXUP = 0x04,
 };
 
 /**
